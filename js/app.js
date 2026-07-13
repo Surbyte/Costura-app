@@ -85,6 +85,13 @@ window.formData = (ids) => {
   return data;
 };
 
+// Argentine phone formatting
+window.formatPhoneArg = function(el) {
+  var v = el.value.replace(/[^\d+]/g, '');
+  if (v.length > 0 && v[0] !== '+') v = '+' + v;
+  el.value = v;
+};
+
 // Register SW
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');

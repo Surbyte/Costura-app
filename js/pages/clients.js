@@ -108,8 +108,8 @@ async function showClientForm(client) {
         <input class="field-input" id="cf_name" value="${isEdit ? client.name : ''}" placeholder="Nombre completo">
       </div>
       <div class="field-group">
-        <label class="field-label">Teléfono</label>
-        <input class="field-input" id="cf_phone" value="${isEdit ? (client.phone||'') : ''}" placeholder="+226 00 00 00 00">
+        <label class="field-label">Teléfono (Argentina)</label>
+        <input class="field-input" id="cf_phone" value="${isEdit ? (client.phone||'') : ''}" placeholder="+54 9 11 XXXX-XXXX" oninput="formatPhoneArg(this)">
       </div>
       <div class="field-group">
         <label class="field-label">Dirección</label>
