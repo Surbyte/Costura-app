@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#6B4C3B">
+<meta name="description" content="Couturart - Gestión para talleres de costura">
+<title>Couturart</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id="app">
+  <header id="topBar">
+    <button id="navBack" class="icon-btn" style="display:none" onclick="router.back()">
+      <svg viewBox="0 0 24 24"><path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"/></svg>
+    </button>
+    <h1 id="pageTitle">Couturart</h1>
+    <button id="navAction" class="icon-btn" style="display:none" onclick="router.showAction()">
+      <svg viewBox="0 0 24 24"><path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"/></svg>
+    </button>
+  </header>
+
+  <main id="mainContent"></main>
+
+  <nav id="bottomNav">
+    <button class="nav-item active" data-route="home" onclick="router.go('home')">
+      <svg viewBox="0 0 24 24"><path fill="currentColor" d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z"/></svg>
+      <span>Inicio</span>
+    </button>
+    <button class="nav-item" data-route="clients" onclick="router.go('clients')">
+      <svg viewBox="0 0 24 24"><path fill="currentColor" d="M16,13C15.71,13 15.38,13 15.06,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z"/></svg>
+      <span>Clientes</span>
+    </button>
+    <button class="nav-item" data-route="orders" onclick="router.go('orders')">
+      <svg viewBox="0 0 24 24"><path fill="currentColor" d="M17,18C15.89,18 15,18.89 15,20A2,2 0 0,0 17,22A2,2 0 0,0 19,20C19,18.89 18.11,18 17,18M1,2V4H3L6.6,11.59L5.25,14.04C5.09,14.32 5,14.65 5,15A2,2 0 0,0 7,17H19V15H7.42C7.28,15 7.17,14.89 7.17,14.75L7.2,14.63L8.1,13H15.55C16.3,13 16.96,12.58 17.3,11.97L20.88,5.48C20.96,5.34 21,5.17 21,5C21,4.45 20.55,4 20,4H5.21L4.27,2H1M7,18C5.89,18 5,18.89 5,20A2,2 0 0,0 7,22A2,2 0 0,0 9,20C9,18.89 8.11,18 7,18Z"/></svg>
+      <span>Pedidos</span>
+    </button>
+    <button class="nav-item" data-route="finance" onclick="router.go('finance')">
+      <svg viewBox="0 0 24 24"><path fill="currentColor" d="M11.5,1L2,6V8H21V6M16,10V17H19V10M2,22H21V19H2M10,10V17H13V10M4,10V17H7V10M22,10H17V17H22V10Z"/></svg>
+      <span>Finanzas</span>
+    </button>
+    <button class="nav-item" data-route="inventory" onclick="router.go('inventory')">
+      <svg viewBox="0 0 24 24"><path fill="currentColor" d="M19,3H5C3.89,3 3,3.89 3,5V19C3,20.11 3.89,21 5,21H19C20.11,21 21,20.11 21,19V5C21,3.89 20.11,3 19,3M10,17L5,12L6.41,10.59L10,14.17L17.59,6.58L19,8L10,17Z"/></svg>
+      <span>Inventario</span>
+    </button>
+  </nav>
+</div>
+
+<!-- Dialog overlay -->
+<div id="dialogOverlay" class="overlay" onclick="dialog.close()" style="display:none">
+  <div id="dialogBox" class="dialog" onclick="event.stopPropagation()">
+    <div id="dialogHeader"></div>
+    <div id="dialogBody"></div>
+    <div id="dialogFooter"></div>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
