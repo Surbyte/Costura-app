@@ -68,4 +68,4 @@ export async function render() {
   `;
 }
 
-router.register('home', render, { title: 'Couturart' });
+router.register('home', render, { title: 'Gestión de Costura' });

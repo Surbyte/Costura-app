@@ -1,3 +1,13 @@
+// Import pages to register them with the router
+import './pages/home.js';
+import './pages/clients.js';
+import './pages/orders.js';
+import './pages/finance.js';
+import './pages/inventory.js';
+import './pages/appointments.js';
+
+import { router } from './router.js';
+
 // Dialog helper
 window.dialog = {
   open(title, bodyHtml, buttons) {
@@ -84,3 +94,6 @@ if ('serviceWorker' in navigator) {
 const style = document.createElement('style');
 style.textContent = `@keyframes fadeIn { from { opacity:0;transform:translateX(-50%) translateY(10px) } to { opacity:1;transform:translateX(-50%) translateY(0) } }`;
 document.head.appendChild(style);
+
+// Initialize router after all pages are registered
+document.addEventListener('DOMContentLoaded', () => router.init());

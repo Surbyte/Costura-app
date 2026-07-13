@@ -1,6 +1,6 @@
 {
-  "name": "Couturart",
-  "short_name": "Couturart",
+  "name": "Gestión de Costura",
+  "short_name": "G. Costura",
   "description": "Gestión para talleres de costura",
   "start_url": "index.html",
   "display": "standalone",
