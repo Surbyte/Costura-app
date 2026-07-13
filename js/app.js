@@ -95,5 +95,8 @@ const style = document.createElement('style');
 style.textContent = `@keyframes fadeIn { from { opacity:0;transform:translateX(-50%) translateY(10px) } to { opacity:1;transform:translateX(-50%) translateY(0) } }`;
 document.head.appendChild(style);
 
+// Make router global for onclick handlers
+window.router = router;
+
 // Initialize router after all pages are registered
 document.addEventListener('DOMContentLoaded', () => router.init());

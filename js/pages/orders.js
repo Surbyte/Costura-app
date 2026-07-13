@@ -175,6 +175,7 @@ async function renderOrderDetail(id) {
 }
 
 window.getOrder = getOrder;
+window.showOrderForm = showOrderForm;
 window.toggleStatusMenu = () => {
   const m = document.getElementById('statusMenu');
   if (m) m.style.display = m.style.display === 'none' ? 'block' : 'none';
