@@ -1,4 +1,4 @@
-const CACHE = 'couturart-v1';
+const CACHE = 'costura-v2';
 const ASSETS = [
   'index.html',
   'css/styles.css',

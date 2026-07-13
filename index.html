@@ -59,5 +59,29 @@
 </div>
 
 <script type="module" src="js/app.js"></script>
+<script>
+// Fallback: navigation via delegation (works even if modules fail)
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('[data-route]');
+  if (btn && window.router) {
+    e.preventDefault();
+    window.router.go(btn.dataset.route);
+  }
+  var back = e.target.closest('#navBack');
+  if (back && window.router) { window.router.back(); }
+  var action = e.target.closest('#navAction');
+  if (action && window.router) { window.router.showAction(); }
+});
+// Retry init if module didn't fire
+if (!window._routerInit) {
+  var checkRouter = setInterval(function() {
+    if (window.router) {
+      window.router.init();
+      window._routerInit = true;
+      clearInterval(checkRouter);
+    }
+  }, 100);
+}
+</script>
 </body>
 </html>
