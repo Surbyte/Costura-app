@@ -1,5 +1,5 @@
 const DB_NAME = 'couturart';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 let db = null;
 
@@ -29,6 +29,10 @@ export function openDB() {
       }
       if (!d.objectStoreNames.contains('appointments')) {
         d.createObjectStore('appointments', { keyPath: 'id', autoIncrement: true });
+      }
+      if (!d.objectStoreNames.contains('order_items')) {
+        const s = d.createObjectStore('order_items', { keyPath: 'id', autoIncrement: true });
+        s.createIndex('orderId', 'orderId', { unique: false });
       }
     };
     req.onsuccess = e => { db = e.target.result; resolve(db); };
@@ -156,6 +160,26 @@ export async function saveAppointment(a) {
 }
 export async function deleteAppointment(id) {
   return doTx('appointments', 'readwrite', s => { s.delete(id); });
+}
+
+// --- Order Items ---
+export async function getOrderItems(orderId) {
+  return doTx('order_items', 'readonly', s => getByIndex(s, 'orderId', orderId));
+}
+export async function saveOrderItem(item) {
+  return doTx('order_items', 'readwrite', s => s.put(item));
+}
+export async function deleteOrderItem(id) {
+  return doTx('order_items', 'readwrite', s => { s.delete(id); });
+}
+export async function deleteOrderItemsByOrder(orderId) {
+  const items = await getOrderItems(orderId);
+  const tx = (await openDB()).transaction('order_items', 'readwrite');
+  const store = tx.objectStore('order_items');
+  return Promise.all(items.map(i => new Promise((resolve, reject) => {
+    const req = store.delete(i.id);
+    req.onsuccess = resolve; req.onerror = e => reject(e.target.error);
+  })));
 }
 
 // --- Utils ---
