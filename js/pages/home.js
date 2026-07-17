@@ -1,4 +1,4 @@
-import { computeFinance, computeOrdersSummary, getAppointments, todayRange } from '../db.js';
+import { computeFinance, computeOrdersSummary, getAppointments, todayRange, exportAllData, importAllData } from '../db.js';
 import { router } from '../router.js';
 
 export async function render() {
@@ -65,7 +65,53 @@ export async function render() {
         `).join('')
       }
     </div>
+
+    <div class="section">
+      <div class="section-title">Respaldo de datos</div>
+      <div class="flex gap-8" style="padding:0 16px 16px">
+        <button class="btn btn-primary" style="flex:1" onclick="exportData()">📤 Exportar</button>
+        <button class="btn btn-outline" style="flex:1" onclick="document.getElementById('importFile').click()">📥 Importar</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(this)">
+      </div>
+    </div>
   `;
 }
+
+// Export
+window.exportData = async function() {
+  const data = await exportAllData();
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'respaldo_costura_' + new Date().toISOString().slice(0, 10) + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('Respaldo descargado');
+};
+
+// Import
+window.importData = async function(input) {
+  const file = input.files[0];
+  if (!file) return;
+  dialog.open('Importar datos', '¿Estás seguro? Se reemplazarán TODOS los datos actuales con los del archivo de respaldo.', [
+    { label: 'Cancelar', action: () => { input.value = ''; } },
+    { label: 'Importar', primary: true, action: async () => {
+      try {
+        const text = await file.text();
+        const data = JSON.parse(text);
+        await importAllData(data);
+        toast('Datos importados correctamente');
+        router.go('home');
+      } catch (e) {
+        toast('Error al importar: ' + e.message);
+      } finally {
+        input.value = '';
+      }
+    }}
+  ]);
+};
 
 router.register('home', render, { title: 'Gestión de Costura' });

@@ -182,6 +182,43 @@ export async function deleteOrderItemsByOrder(orderId) {
   })));
 }
 
+// --- Export / Import ---
+const ALL_STORES = ['clients', 'measurements', 'orders', 'transactions', 'inventory', 'appointments', 'order_items'];
+
+export async function exportAllData() {
+  const data = {};
+  for (const store of ALL_STORES) {
+    data[store] = await doTx(store, 'readonly', getAll);
+  }
+  data._exportedAt = Date.now();
+  data._version = 2;
+  return data;
+}
+
+export async function importAllData(data) {
+  if (!data || typeof data !== 'object') throw new Error('Archivo inválido');
+  const db = await openDB();
+  // Clear all stores
+  for (const store of ALL_STORES) {
+    await new Promise((resolve, reject) => {
+      const tx = db.transaction(store, 'readwrite');
+      const s = tx.objectStore(store);
+      const req = s.clear();
+      tx.oncomplete = resolve;
+      tx.onerror = e => reject(e.target.error);
+    });
+  }
+  // Import data
+  for (const store of ALL_STORES) {
+    const items = data[store];
+    if (Array.isArray(items) && items.length > 0) {
+      for (const item of items) {
+        await doTx(store, 'readwrite', s => s.put(item));
+      }
+    }
+  }
+}
+
 // --- Utils ---
 export function todayRange() {
   const now = new Date();
