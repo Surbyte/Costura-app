@@ -5,6 +5,7 @@ import './pages/orders.js';
 import './pages/finance.js';
 import './pages/inventory.js';
 import './pages/appointments.js';
+import './pages/sync.js';
 
 import { router } from './router.js';
 
@@ -72,7 +73,8 @@ window.icon = {
   inventory: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M19,3H5C3.89,3 3,3.89 3,5V19C3,20.11 3.89,21 5,21H19C20.11,21 21,20.11 21,19V5C21,3.89 20.11,3 19,3M10,17L5,12L6.41,10.59L10,14.17L17.59,6.58L19,8L10,17Z"/></svg>',
   calendar: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M19,19H5V8H19M16,1V3H8V1H6V3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3H18V1M17,12H12V17H17V12Z"/></svg>',
   home: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z"/></svg>',
-  account: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M11.5,1L2,6V8H21V6M16,10V17H19V10M2,22H21V19H2M10,10V17H13V10M4,10V17H7V10"/></svg>'
+  account: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M11.5,1L2,6V8H21V6M16,10V17H19V10M2,22H21V19H2M10,10V17H13V10M4,10V17H7V10"/></svg>',
+  sync: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12,4V1L8,5L12,9V6A6,6 0 0,1 18,12C18,13.31 17.64,14.54 17,15.58L18.44,17C19.43,15.7 20,14.18 20,12.5A7.5,7.5 0 0,0 12.5,5H12M12,19A6,6 0 0,1 6,12C6,10.69 6.36,9.46 7,8.42L5.56,7C4.57,8.3 4,9.82 4,11.5A7.5,7.5 0 0,0 11.5,19H12V22L16,18L12,14V19Z"/></svg>'
 };
 
 // Helper to compile a form object
