@@ -1,4 +1,4 @@
-import { getTransactions, saveTransaction, deleteTransaction, computeFinance } from '../db.js';
+import { getTransactions, saveTransaction, deleteTransaction, computeFinance, getOrders, getClients, getInventory } from '../db.js';
 import { router } from '../router.js';
 
 let filterType = 'all';
@@ -26,6 +26,10 @@ export async function render() {
           <div class="value">${fmt.money(finance.balance)}</div>
         </div>
       </div>
+    </div>
+
+    <div style="padding:0 16px 8px">
+      <button class="btn btn-primary btn-block" style="border-radius:8px;padding:8px" onclick="exportFinanceExcel()">📊 Exportar todo a Excel</button>
     </div>
 
     <div class="tabs">
@@ -103,4 +107,80 @@ window.deleteFinanceTxn = async (id) => {
   await deleteTransaction(id);
   toast('Transacción eliminada');
   router.go('finance');
+};
+
+window.exportFinanceExcel = async () => {
+  const txns = await getTransactions();
+  const orders = await getOrders();
+  const clients = await getClients();
+  const inventory = await getInventory();
+  const finance = await computeFinance();
+
+  const clientMap = {};
+  clients.forEach(c => { clientMap[c.id] = c.name; });
+  const clientName = (id) => clientMap[id] || '#'.concat(id);
+
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const sheets = [];
+
+  // Sheet 1: Resumen
+  sheets.push({
+    name: 'Resumen',
+    headers: ['Indicador', 'Valor'],
+    rows: [
+      ['Ingresos totales', finance.income],
+      ['Gastos totales', finance.expenses],
+      ['Balance', finance.balance],
+      ['Exportado', dateStr]
+    ]
+  });
+
+  // Sheet 2: Ingresos
+  const income = txns.filter(t => t.type === 'income');
+  sheets.push({
+    name: 'Ingresos',
+    headers: ['Fecha', 'Descripción', 'Monto', 'Pedido ID'],
+    rows: income.map(t => [t.date ? fmt.datetime(t.date) : '', t.description || '', t.amount, t.orderId || ''])
+  });
+
+  // Sheet 3: Gastos
+  const expense = txns.filter(t => t.type === 'expense');
+  sheets.push({
+    name: 'Gastos',
+    headers: ['Fecha', 'Descripción', 'Monto'],
+    rows: expense.map(t => [t.date ? fmt.datetime(t.date) : '', t.description || '', t.amount])
+  });
+
+  // Sheet 4: Pedidos
+  sheets.push({
+    name: 'Pedidos',
+    headers: ['ID', 'Cliente', 'Descripción', 'Total', 'Anticipo', 'Saldo', 'Estado', 'Fecha entrega'],
+    rows: orders.map(o => [
+      o.id, clientName(o.clientId), o.description, o.total, o.deposit || 0,
+      o.total - (o.deposit || 0),
+      o.status === 'completed' ? 'Completado' : o.status === 'in_progress' ? 'En curso' : 'Pendiente',
+      o.deadline ? fmt.date(o.deadline) : ''
+    ])
+  });
+
+  // Sheet 5: Clientes
+  sheets.push({
+    name: 'Clientes',
+    headers: ['ID', 'Nombre', 'Teléfono', 'Dirección', 'Notas'],
+    rows: clients.map(c => [c.id, c.name, c.phone || '', c.address || '', c.notes || ''])
+  });
+
+  // Sheet 6: Inventario
+  sheets.push({
+    name: 'Inventario',
+    headers: ['Nombre', 'Cantidad', 'Unidad', 'Precio/Unidad', 'Categoría', 'Valor total'],
+    rows: inventory.map(i => [i.name, i.quantity || 0, i.unit || '', i.price || 0, i.category || '', (i.quantity || 0) * (i.price || 0)])
+  });
+
+  if (typeof exportExcel !== 'undefined') {
+    exportExcel.download(sheets, 'informe_costura_' + dateStr + '.xls');
+    toast('Excel exportado');
+  } else {
+    toast('Error: módulo de exportación no cargado');
+  }
 };
