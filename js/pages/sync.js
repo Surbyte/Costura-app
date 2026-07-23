@@ -100,7 +100,7 @@ function showSyncConfigForm() {
       <input class="field-input" id="supabase_url" value="${cfg ? cfg.url : ''}" placeholder="https://xxxxx.supabase.co">
     </div>
     <div class="field-group">
-      <label class="field-label">Anon Key</label>
+      <label class="field-label">Clave anónima (anon key)</label>
       <input class="field-input" id="supabase_key" value="${cfg ? cfg.key : ''}" placeholder="eyJhbGciOiJSUzI1NiIs...">
     </div>
     <div class="text-muted" style="font-size:0.8rem;margin-top:8px">

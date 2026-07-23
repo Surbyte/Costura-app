@@ -171,7 +171,7 @@
 
   window.SyncManager = {
     configure: function(url, key) {
-      if (!url || !key) throw new Error('URL y clave de Supabase son requeridas');
+      if (!url || !key) throw new Error('URL y Clave de Supabase son requeridas');
       saveConfig(url.trim(), key.trim());
     },
 
